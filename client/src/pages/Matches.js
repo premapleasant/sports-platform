@@ -3,6 +3,7 @@ import API from "../services/api";
 import MatchCard from "../components/MatchCard";
 import FilterBar from "../components/FilterBar";
 import Navbar from "../components/Navbar";
+import { useEffect, useCallback } from "react";
 
 function Matches() {
   const [matches, setMatches] = useState([]);
@@ -11,12 +12,15 @@ function Matches() {
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState("");
 
+
+
+
   useEffect(() => {
     fetchMatches();
     fetchFavorites();
   }, [filter]);
 
-  const fetchMatches = async () => {
+  const fetchMatches = useCallback(async () => {
     try {
       setLoading(true);
       const res = await API.get(`/games${filter ? `?sport=${filter}` : ""}`);
@@ -26,7 +30,7 @@ function Matches() {
     } finally {
       setLoading(false);
     }
-  };
+  }, []);
 
   const fetchFavorites = async () => {
     const res = await API.get("/favorites");
@@ -41,7 +45,7 @@ function Matches() {
       await API.post(`/favorites/${id}`);
       setFavorites([...favorites, id]);
     }
-  };
+  }
 
   if (loading) return <p className="center-text">Loading matches...</p>;
   if (error) return <p className="center-text">{error}</p>;
