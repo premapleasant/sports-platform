@@ -14,7 +14,7 @@ app.use(cors({
 
 const PORT = process.env.PORT || 5000;
 
-/* ================= AUTH MIDDLEWARE ================= */
+/*  AUTH MIDDLEWARE  */
 const auth = (req, res, next) => {
   const token = req.headers.authorization?.split(" ")[1];
   if (!token) return res.status(401).json({ message: "Unauthorized" });
@@ -26,7 +26,7 @@ const auth = (req, res, next) => {
   });
 };
 
-/* ================= REGISTER ================= */
+/*  REGISTER  */
 app.post("/auth/register", async (req, res) => {
   const { name, email, password } = req.body;
   const hashed = await bcrypt.hash(password, 10);
@@ -41,7 +41,7 @@ app.post("/auth/register", async (req, res) => {
   );
 });
 
-/* ================= LOGIN ================= */
+/*  LOGIN  */
 app.post("/auth/login", (req, res) => {
   const { email, password } = req.body;
 
@@ -66,7 +66,7 @@ app.post("/auth/login", (req, res) => {
   );
 });
 
-/* ================= GET GAMES ================= */
+/*  GET GAMES  */
 app.get("/games", auth, (req, res) => {
   const { sport } = req.query;
   let sql = "SELECT * FROM games";
@@ -82,7 +82,7 @@ app.get("/games", auth, (req, res) => {
   });
 });
 
-/* ================= FAVORITES ================= */
+/*  FAVORITES  */
 app.post("/favorites/:gameId", auth, (req, res) => {
   db.query(
     "INSERT INTO favorites (userId, gameId) VALUES (?, ?)",
@@ -109,7 +109,7 @@ app.get("/favorites", auth, (req, res) => {
   );
 });
 
-/* ================= START SERVER ================= */
+
 app.listen(PORT, () =>
   console.log("Server running on port", PORT)
 );
