@@ -7,7 +7,12 @@ const db = require("./db");
 
 const app = express();
 app.use(express.json());
-app.use(cors());
+app.use(cors({
+  origin: "https://sports-platform-backend-42q1.onrender.com",
+  credentials: true
+}));
+
+const PORT = process.env.PORT || 5000;
 
 /* ================= AUTH MIDDLEWARE ================= */
 const auth = (req, res, next) => {
@@ -105,6 +110,6 @@ app.get("/favorites", auth, (req, res) => {
 });
 
 /* ================= START SERVER ================= */
-app.listen(process.env.PORT, () =>
-  console.log("Server running on port", process.env.PORT)
+app.listen(PORT, () =>
+  console.log("Server running on port", PORT)
 );
